@@ -1,0 +1,55 @@
+--- TERMINALES ---
+PACKAGE
+PUBLIC
+CLASS
+IF
+SYSTEM
+OUT
+PRINTLN
+
++ - * /
+() []
+< > <= >= == !=
+; .
+
+ENTERO
+STRING
+ID
+
+-- NO TERMINALES --
+inicio
+codigo
+lista_instr
+instruccion
+
+-- SIMBOLO INICIAL: inicio
+
+
+--- PRODUCCIONES
+
+inicio -> PACKAGE ID ; PUBLIC CLASS ID { codigo }
+
+codigo -> PUBLIC ID ( ){ instruccion }
+
+lista_instr -> lista_instr instruccion
+			| instruccion
+
+instruccion -> print
+			| if
+			
+print -> SYSTEM . OUT . PRINTLN ( expresion ) ;
+
+if -> IF ( expresion ) { lista_instr }
+			
+
+expresion -> - expresion
+		| ( expresion )
+		| expresion + expresion
+		| expresion - expresion
+		|	...
+		| expresion < expresion
+		| ...
+		| not expresion
+		| expresion && expresion
+		| ...
+		| TIPOS DATOS

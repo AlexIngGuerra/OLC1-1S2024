@@ -1,0 +1,18 @@
+1. Listas de Objetos
+
+lista -> lista ELEMENTO
+		| ELEMENTO
+		
+Donde: ELEMENTO es cualquier cosa.
+
+
+2. Toda la gramatica se resume en instrucciones y expresiones
+
+inicio -> lista
+
+lista -> lista instruccion 
+	| instruccion
+	
+instruccion -> print
+
+expresiones -> string
