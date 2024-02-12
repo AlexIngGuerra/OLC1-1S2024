@@ -1,0 +1,69 @@
+// ------------  Paquete e importaciones ------------
+package compi;
+
+import java_cup.runtime.*;
+
+
+//------> Codigo para el parser
+//------> Declaracion de variables, funciones y funciones de error
+
+parser code 
+{:
+    public String resultado = ""; 
+
+    public void syntax_error(Symbol s)
+    {
+            System.err.println("Error Sintactico: "+ s.value + " - Fila: " + s.right + " - Columna: " + s.left + ". Recuperado" );
+    }
+
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception
+    {
+            System.err.println("Error Sintactico: "+ s.value + " - Fila: " + s.right + " - Columna: " + s.left + ". Sin recuperacion." );
+    }
+
+:}
+
+
+//------> Codigo para las acciones gramaticales (no tocar)
+action code
+{:  :}
+
+
+//------> Declaración de terminales
+terminal String RPRINT;
+terminal String EXCL, PARDER, PARIZQ, PYC;
+terminal String ENTERO, CADENA;
+terminal String MAS;
+
+//------> Declaración de no terminales
+non terminal inicio;
+non terminal listainstr;
+non terminal instruccion, expresion;
+non terminal print;
+
+//------> PRECEDENCIA
+precedence left MAS;
+
+//------> Definir Simbolo Inicial
+start with inicio; 
+
+
+// ------------>  Producciones  <------------
+
+inicio ::= listainstr
+;
+
+listainstr ::= listainstr instruccion
+    | instruccion
+;
+
+instruccion ::= print
+;
+
+print ::= RPRINT EXCL PARIZQ expresion:exp PARDER PYC    {: util.Instruccion.print(exp.toString()); :}
+;
+
+expresion ::= ENTERO:val    {: RESULT = val.toString(); :}
+        | CADENA:val        {: RESULT = val.toString(); :}
+        | expresion:izq MAS expresion:der    {: RESULT = util.Expresion.suma(izq.toString(), der.toString() ); :}
+;
