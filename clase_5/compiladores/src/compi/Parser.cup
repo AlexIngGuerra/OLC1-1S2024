@@ -1,0 +1,101 @@
+// ------------  Paquete e importaciones ------------
+package compi;
+
+import java_cup.runtime.*;
+import java.util.LinkedList;
+
+//------> Codigo para el parser
+//------> Declaracion de variables, funciones y funciones de error
+
+parser code 
+{:
+    public String resultado = ""; 
+
+    public void syntax_error(Symbol s)
+    {
+            System.err.println("Error Sintactico: "+ s.value + " - Fila: " + s.right + " - Columna: " + s.left + ". Recuperado" );
+    }
+
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception
+    {
+            System.err.println("Error Sintactico: "+ s.value + " - Fila: " + s.right + " - Columna: " + s.left + ". Sin recuperacion." );
+    }
+
+:}
+
+
+//------> Codigo para las acciones gramaticales (no tocar)
+action code
+{:  :}
+
+
+//------> Declaración de terminales
+terminal String RPRINT;
+terminal String EXCL, PARDER, PARIZQ, PYC;
+terminal String ENTERO, CADENA, ID;
+terminal String COMA, IGUAL;
+terminal String MAS;
+
+//------> Declaración de no terminales
+non terminal inicio;
+non terminal listainstr, listaexp;
+non terminal instruccion, expresion;
+non terminal print, variable, conjunto;
+
+//------> PRECEDENCIA
+precedence left MAS;
+
+//------> Definir Simbolo Inicial
+start with inicio; 
+
+
+// ------------>  Producciones  <------------
+
+inicio ::= listainstr
+;
+
+listainstr ::= listainstr instruccion
+    | instruccion
+;
+
+instruccion ::= print
+    | variable
+    | conjunto
+    | error PYC
+;
+
+print ::= RPRINT EXCL PARIZQ expresion:exp PARDER PYC    {: util.Instruccion.print(exp.toString()); :}
+;
+
+variable ::= ID:var IGUAL expresion:val PYC     
+    {:
+    util.Instruccion.tablaSimb.put(var.toString(), val.toString());
+    :}
+;
+
+conjunto ::= ID IGUAL PARIZQ listaexp:lista PARDER PYC  
+    {: 
+        util.Instruccion.mostrarLista((LinkedList<String>) lista);
+    :}
+;
+
+listaexp::= listaexp:listexp COMA expresion:exp    
+    {:  
+        LinkedList<String> lista = (LinkedList<String>) listexp;
+        lista.add(exp.toString());
+        RESULT = lista;
+    :}
+
+    | expresion:exp                        
+    {: 
+        LinkedList<String> lista = new LinkedList<>();
+        lista.add(exp.toString());
+        RESULT = lista;
+     :}
+;
+
+expresion ::= ENTERO:val    {: RESULT = val.toString(); :}
+        | CADENA:val        {: RESULT = val.toString(); :}
+        | ID:val            {: RESULT = util.Instruccion.tablaSimb.get(val.toString()); :}
+        | expresion:izq MAS expresion:der    {: RESULT = util.Expresion.suma(izq.toString(), der.toString() ); :}
+;
