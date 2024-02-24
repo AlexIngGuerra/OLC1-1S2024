@@ -30,7 +30,7 @@ PROGRAM
 		titulo::char[] = “Estudiantes” end;
 		ejeX::char[] = [“1 Parcial”, “2 parcial”, “Final”] end;
 		ejeY::double = [gb1, 30, 70] end;
-		EXEC grapBar end;
+		EXEC graphBar end;
 	) end;
 	
 	graphPie(
@@ -40,7 +40,7 @@ PROGRAM
 		label::char[] = [“Uno”, “Dos”, “Tres”] end;
 		titulo::char[] = “Ejemplo Gráfica de Pie” end;
 		values::double = [50, 30, 20] end;
-		EXEC grapPie end;
+		EXEC graphPie end;
 	) end;
 	
 	
@@ -51,7 +51,7 @@ PROGRAM
 		ejeY::double = @notas end;
 		tituloX::char[] = “Actividades” end;
 		tituloY::char[] = “Notas” end;
-		EXEC grapLine end;
+		EXEC graphLine end;
 	) end;
 	
 	Histogram(
