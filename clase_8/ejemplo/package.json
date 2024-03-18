@@ -1,0 +1,16 @@
+{
+  "name": "ejemplo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "parser": "npx jison ./analizador/parser.jison -o ./analizador/parser.js",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jison": "^0.4.18"
+  }
+}
